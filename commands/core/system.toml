@@ -1,0 +1,86 @@
+[[command]]
+name = "disk-free"
+binary = "df"
+template = "df -h"
+description = "查看磁盘使用情况和剩余空间"
+keywords = ["磁盘", "空间", "df", "disk", "剩余", "存储"]
+examples = [
+  { input = "查看磁盘空间", filled = "df -h" },
+  { input = "查看磁盘使用率", filled = "df -h" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "system-info"
+binary = "uname"
+template = "uname -a"
+description = "查看系统信息 (内核、架构等)"
+keywords = ["系统", "内核", "uname", "架构", "版本", "系统信息"]
+examples = [
+  { input = "查看系统信息", filled = "uname -a" },
+  { input = "查看内核版本", filled = "uname -r" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "uptime-info"
+binary = "uptime"
+template = "uptime"
+description = "查看系统运行时间和负载"
+keywords = ["运行时间", "uptime", "负载", "load", "开机时长"]
+examples = [
+  { input = "查看系统运行了多久", filled = "uptime" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "memory-info"
+binary = "free"
+template = "free -h"
+description = "查看内存使用情况"
+keywords = ["内存", "内存使用", "free", "memory", "RAM", "可用内存"]
+examples = [
+  { input = "查看内存使用情况", filled = "free -h" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "environment-var"
+binary = "env"
+template = "env | grep {pattern}"
+description = "查看或搜索环境变量"
+keywords = ["环境变量", "env", "环境", "变量", "PATH", "配置"]
+examples = [
+  { input = "查看所有环境变量", filled = "env" },
+  { input = "查看 PATH 变量", filled = "echo $PATH" },
+  { input = "搜索环境变量", filled = "env | grep HOME" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "pattern", default = "", description = "搜索模式" },
+]
+
+[[command]]
+name = "which-command"
+binary = "which"
+template = "which {command}"
+description = "查看命令的完整路径"
+keywords = ["which", "路径", "位置", "在哪", "命令位置", "where"]
+examples = [
+  { input = "查看 python 在哪", filled = "which python" },
+  { input = "查看 node 的路径", filled = "which node" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "command", required = true, description = "命令名称" },
+]

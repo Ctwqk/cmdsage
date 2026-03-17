@@ -1,0 +1,48 @@
+[[command]]
+name = "make-build"
+binary = "make"
+template = "make {target}"
+description = "使用 Makefile 构建项目"
+keywords = ["make", "构建", "编译", "build", "makefile"]
+examples = [
+  { input = "构建项目", filled = "make" },
+  { input = "清理构建", filled = "make clean" },
+  { input = "安装", filled = "make install" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "target", default = "", description = "构建目标 (clean, install 等)" },
+]
+
+[[command]]
+name = "python-run"
+binary = "python3"
+template = "python3 {file}"
+description = "运行 Python 脚本"
+keywords = ["python", "运行", "脚本", "执行", "py"]
+examples = [
+  { input = "运行 Python 脚本", filled = "python3 script.py" },
+  { input = "运行 Python 模块", filled = "python3 -m http.server 8000" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "file", required = true, description = "Python 文件或 -m 模块" },
+]
+
+[[command]]
+name = "http-server"
+binary = "python3"
+template = "python3 -m http.server {port}"
+description = "快速启动 HTTP 文件服务器"
+keywords = ["http", "server", "服务器", "静态", "文件服务", "web"]
+examples = [
+  { input = "启动HTTP服务器", filled = "python3 -m http.server 8000" },
+  { input = "在3000端口启动", filled = "python3 -m http.server 3000" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "port", default = "8000", description = "监听端口" },
+]

@@ -1,0 +1,67 @@
+[[command]]
+name = "tar-extract"
+binary = "tar"
+template = "tar -xzf {file} -C {dest}"
+description = "解压 tar/tar.gz 压缩包"
+keywords = ["解压", "tar", "解包", "extract", "gz", "压缩包"]
+examples = [
+  { input = "解压 tar.gz 文件", filled = "tar -xzf archive.tar.gz" },
+  { input = "解压到指定目录", filled = "tar -xzf archive.tar.gz -C /tmp/" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "file", required = true, description = "压缩包路径" },
+  { name = "dest", default = ".", description = "解压目标目录" },
+]
+
+[[command]]
+name = "tar-create"
+binary = "tar"
+template = "tar -czf {output} {source}"
+description = "创建 tar.gz 压缩包"
+keywords = ["压缩", "打包", "tar", "归档", "compress", "pack", "目录", "项目", "文件夹"]
+examples = [
+  { input = "打包目录为 tar.gz", filled = "tar -czf archive.tar.gz dir/" },
+  { input = "打包多个文件", filled = "tar -czf archive.tar.gz file1 file2 file3" },
+  { input = "压缩整个项目目录", filled = "tar -czf project.tar.gz project/" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "output", required = true, description = "输出文件名" },
+  { name = "source", required = true, description = "要打包的文件/目录" },
+]
+
+[[command]]
+name = "zip-create"
+binary = "zip"
+template = "zip -r {output} {source}"
+description = "创建 zip 压缩包"
+keywords = ["zip", "压缩", "打包"]
+examples = [
+  { input = "压缩目录为 zip", filled = "zip -r archive.zip dir/" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "output", required = true, description = "输出文件名" },
+  { name = "source", required = true, description = "要压缩的文件/目录" },
+]
+
+[[command]]
+name = "unzip-extract"
+binary = "unzip"
+template = "unzip {file} -d {dest}"
+description = "解压 zip 压缩包"
+keywords = ["解压", "unzip", "zip"]
+examples = [
+  { input = "解压 zip 文件", filled = "unzip archive.zip" },
+  { input = "解压到指定目录", filled = "unzip archive.zip -d /tmp/" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "file", required = true, description = "zip 文件路径" },
+  { name = "dest", default = ".", description = "解压目标目录" },
+]

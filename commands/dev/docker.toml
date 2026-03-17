@@ -1,0 +1,127 @@
+[[command]]
+name = "docker-ps"
+binary = "docker"
+template = "docker ps {flags}"
+description = "查看运行中的 Docker 容器"
+keywords = ["docker", "容器", "ps", "运行中", "container"]
+examples = [
+  { input = "查看运行中的容器", filled = "docker ps" },
+  { input = "查看所有容器", filled = "docker ps -a" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-a 所有, -q 只显示ID" },
+]
+
+[[command]]
+name = "docker-images"
+binary = "docker"
+template = "docker images"
+description = "查看本地 Docker 镜像"
+keywords = ["docker", "镜像", "images", "image"]
+examples = [
+  { input = "查看所有镜像", filled = "docker images" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "docker-run"
+binary = "docker"
+template = "docker run {flags} {image}"
+description = "运行 Docker 容器"
+keywords = ["docker", "运行", "run", "启动", "容器"]
+examples = [
+  { input = "运行 nginx 容器", filled = "docker run -d -p 80:80 nginx" },
+  { input = "运行交互式容器", filled = "docker run -it ubuntu bash" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "moderate"
+args = [
+  { name = "flags", default = "-d", description = "-d 后台, -it 交互, -p 端口映射, -v 挂载卷" },
+  { name = "image", required = true, description = "镜像名称" },
+]
+
+[[command]]
+name = "docker-stop"
+binary = "docker"
+template = "docker stop {container}"
+description = "停止 Docker 容器"
+keywords = ["docker", "停止", "stop", "关闭"]
+examples = [
+  { input = "停止容器", filled = "docker stop container_name" },
+  { input = "停止所有容器", filled = "docker stop $(docker ps -q)" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "moderate"
+args = [
+  { name = "container", required = true, description = "容器名称或ID" },
+]
+
+[[command]]
+name = "docker-logs"
+binary = "docker"
+template = "docker logs {flags} {container}"
+description = "查看 Docker 容器日志"
+keywords = ["docker", "日志", "logs", "log", "容器日志"]
+examples = [
+  { input = "查看容器日志", filled = "docker logs -f container_name" },
+  { input = "查看最近100行日志", filled = "docker logs --tail 100 container_name" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-f --tail 100", description = "-f 跟踪, --tail 行数" },
+  { name = "container", required = true, description = "容器名称或ID" },
+]
+
+[[command]]
+name = "docker-exec"
+binary = "docker"
+template = "docker exec -it {container} {command}"
+description = "在运行中的容器内执行命令"
+keywords = ["docker", "exec", "进入", "容器内", "shell"]
+examples = [
+  { input = "进入容器 shell", filled = "docker exec -it container_name bash" },
+  { input = "在容器内执行命令", filled = "docker exec container_name ls /app" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "container", required = true, description = "容器名称或ID" },
+  { name = "command", default = "bash", description = "要执行的命令" },
+]
+
+[[command]]
+name = "docker-compose-up"
+binary = "docker"
+template = "docker compose up {flags}"
+description = "启动 Docker Compose 服务"
+keywords = ["docker", "compose", "up", "启动", "编排"]
+examples = [
+  { input = "启动所有服务", filled = "docker compose up -d" },
+  { input = "重新构建并启动", filled = "docker compose up -d --build" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "moderate"
+args = [
+  { name = "flags", default = "-d", description = "-d 后台, --build 重新构建" },
+]
+
+[[command]]
+name = "docker-compose-down"
+binary = "docker"
+template = "docker compose down {flags}"
+description = "停止并移除 Docker Compose 服务"
+keywords = ["docker", "compose", "down", "停止", "关闭"]
+examples = [
+  { input = "停止所有服务", filled = "docker compose down" },
+  { input = "停止并删除卷", filled = "docker compose down -v" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "moderate"
+args = [
+  { name = "flags", default = "", description = "-v 删除卷, --rmi all 删除镜像" },
+]

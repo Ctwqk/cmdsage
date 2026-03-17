@@ -1,0 +1,170 @@
+[[command]]
+name = "win-dir"
+binary = "dir"
+template = "dir {path}"
+description = "列出目录内容 (Windows)"
+keywords = ["列出", "查看", "文件", "目录", "dir", "list"]
+examples = [
+  { input = "查看当前目录", filled = "dir" },
+  { input = "查看所有文件", filled = "dir /a" },
+]
+platforms = ["windows"]
+risk = "safe"
+args = [
+  { name = "path", default = ".", description = "目标目录" },
+]
+
+[[command]]
+name = "win-tasklist"
+binary = "tasklist"
+template = "tasklist {flags}"
+description = "查看运行中的进程 (Windows)"
+keywords = ["进程", "任务", "tasklist", "process", "运行中"]
+examples = [
+  { input = "查看所有进程", filled = "tasklist" },
+  { input = "查找指定进程", filled = "tasklist | findstr python" },
+]
+platforms = ["windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "/v 详细信息" },
+]
+
+[[command]]
+name = "win-taskkill"
+binary = "taskkill"
+template = "taskkill /F /PID {pid}"
+description = "终止指定进程 (Windows)"
+keywords = ["杀死", "终止", "taskkill", "进程", "停止"]
+examples = [
+  { input = "杀死进程", filled = "taskkill /F /PID 1234" },
+  { input = "按名称杀死进程", filled = "taskkill /F /IM python.exe" },
+]
+platforms = ["windows"]
+risk = "moderate"
+args = [
+  { name = "pid", required = true, description = "进程ID" },
+]
+
+[[command]]
+name = "win-ipconfig"
+binary = "ipconfig"
+template = "ipconfig {flags}"
+description = "查看网络配置 (Windows)"
+keywords = ["IP", "网络", "ipconfig", "地址", "网卡"]
+examples = [
+  { input = "查看IP地址", filled = "ipconfig" },
+  { input = "查看详细网络信息", filled = "ipconfig /all" },
+]
+platforms = ["windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "/all 详细, /flushdns 清DNS" },
+]
+
+[[command]]
+name = "win-netstat"
+binary = "netstat"
+template = "netstat -ano | findstr {port}"
+description = "查看端口占用 (Windows)"
+keywords = ["端口", "netstat", "占用", "listen", "监听"]
+examples = [
+  { input = "查看8080端口", filled = "netstat -ano | findstr 8080" },
+  { input = "查看所有监听端口", filled = "netstat -ano | findstr LISTENING" },
+]
+platforms = ["windows"]
+risk = "safe"
+args = [
+  { name = "port", required = true, description = "端口号或 LISTENING" },
+]
+
+[[command]]
+name = "win-winget-install"
+binary = "winget"
+template = "winget install {package}"
+description = "使用 winget 安装软件 (Windows)"
+keywords = ["winget", "安装", "install", "软件", "应用"]
+examples = [
+  { input = "安装 VS Code", filled = "winget install Microsoft.VisualStudioCode" },
+  { input = "安装 Python", filled = "winget install Python.Python.3.12" },
+]
+platforms = ["windows"]
+risk = "safe"
+args = [
+  { name = "package", required = true, description = "软件包名称或ID" },
+]
+
+[[command]]
+name = "win-winget-search"
+binary = "winget"
+template = "winget search {query}"
+description = "搜索可安装的软件 (Windows)"
+keywords = ["winget", "搜索", "search", "软件"]
+examples = [
+  { input = "搜索 python", filled = "winget search python" },
+]
+platforms = ["windows"]
+risk = "safe"
+args = [
+  { name = "query", required = true, description = "搜索关键字" },
+]
+
+[[command]]
+name = "win-sfc"
+binary = "sfc"
+template = "sfc /scannow"
+description = "系统文件检查器 (修复损坏的系统文件)"
+keywords = ["修复", "系统", "sfc", "损坏", "系统文件"]
+examples = [
+  { input = "修复系统文件", filled = "sfc /scannow" },
+]
+platforms = ["windows"]
+risk = "moderate"
+args = []
+
+[[command]]
+name = "win-systeminfo"
+binary = "systeminfo"
+template = "systeminfo"
+description = "查看系统详细信息 (Windows)"
+keywords = ["系统信息", "systeminfo", "版本", "硬件"]
+examples = [
+  { input = "查看系统信息", filled = "systeminfo" },
+]
+platforms = ["windows"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "win-powershell-get-content"
+binary = "powershell"
+template = "Get-Content {file}"
+description = "查看文件内容 (PowerShell)"
+keywords = ["查看", "文件", "cat", "内容", "PowerShell"]
+examples = [
+  { input = "查看文件内容", filled = "Get-Content file.txt" },
+  { input = "查看最后10行", filled = "Get-Content file.txt -Tail 10" },
+]
+platforms = ["windows"]
+risk = "safe"
+args = [
+  { name = "file", required = true, description = "文件路径" },
+]
+
+[[command]]
+name = "win-robocopy"
+binary = "robocopy"
+template = "robocopy {source} {dest} {flags}"
+description = "高级文件复制 (Windows)"
+keywords = ["复制", "robocopy", "备份", "同步", "镜像"]
+examples = [
+  { input = "镜像复制目录", filled = "robocopy C:\\source D:\\backup /MIR" },
+  { input = "复制目录", filled = "robocopy C:\\source D:\\dest /E" },
+]
+platforms = ["windows"]
+risk = "moderate"
+args = [
+  { name = "source", required = true, description = "源目录" },
+  { name = "dest", required = true, description = "目标目录" },
+  { name = "flags", default = "/E", description = "/E 包含子目录, /MIR 镜像, /Z 可恢复" },
+]

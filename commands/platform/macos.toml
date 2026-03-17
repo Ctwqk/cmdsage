@@ -1,0 +1,176 @@
+[[command]]
+name = "brew-install"
+binary = "brew"
+template = "brew install {package}"
+description = "使用 Homebrew 安装软件"
+keywords = ["brew", "homebrew", "安装", "install", "软件"]
+examples = [
+  { input = "安装 wget", filled = "brew install wget" },
+  { input = "安装 htop", filled = "brew install htop" },
+]
+platforms = ["macos"]
+risk = "safe"
+args = [
+  { name = "package", required = true, description = "软件包名称" },
+]
+
+[[command]]
+name = "brew-search"
+binary = "brew"
+template = "brew search {query}"
+description = "搜索 Homebrew 可用的软件"
+keywords = ["brew", "搜索", "search", "软件"]
+examples = [
+  { input = "搜索 python", filled = "brew search python" },
+]
+platforms = ["macos"]
+risk = "safe"
+args = [
+  { name = "query", required = true, description = "搜索关键字" },
+]
+
+[[command]]
+name = "brew-update"
+binary = "brew"
+template = "brew update && brew upgrade"
+description = "更新 Homebrew 并升级所有软件"
+keywords = ["brew", "更新", "升级", "update", "upgrade"]
+examples = [
+  { input = "更新所有 brew 软件", filled = "brew update && brew upgrade" },
+]
+platforms = ["macos"]
+risk = "moderate"
+args = []
+
+[[command]]
+name = "brew-list"
+binary = "brew"
+template = "brew list"
+description = "列出已安装的 Homebrew 软件"
+keywords = ["brew", "列出", "已安装", "list"]
+examples = [
+  { input = "查看已安装的 brew 包", filled = "brew list" },
+]
+platforms = ["macos"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "brew-uninstall"
+binary = "brew"
+template = "brew uninstall {package}"
+description = "卸载 Homebrew 软件"
+keywords = ["brew", "卸载", "删除", "uninstall", "remove"]
+examples = [
+  { input = "卸载 wget", filled = "brew uninstall wget" },
+]
+platforms = ["macos"]
+risk = "moderate"
+args = [
+  { name = "package", required = true, description = "软件包名称" },
+]
+
+[[command]]
+name = "open-file"
+binary = "open"
+template = "open {path}"
+description = "用默认应用打开文件或目录"
+keywords = ["打开", "open", "默认", "应用", "Finder"]
+examples = [
+  { input = "打开当前目录", filled = "open ." },
+  { input = "用 Finder 打开文件夹", filled = "open ~/Documents" },
+  { input = "打开网址", filled = "open https://google.com" },
+]
+platforms = ["macos"]
+risk = "safe"
+args = [
+  { name = "path", required = true, description = "文件/目录/URL 路径" },
+]
+
+[[command]]
+name = "pbcopy"
+binary = "pbcopy"
+template = "echo '{text}' | pbcopy"
+description = "复制文本到剪贴板"
+keywords = ["复制", "剪贴板", "pbcopy", "clipboard", "copy"]
+examples = [
+  { input = "复制文件内容到剪贴板", filled = "cat file.txt | pbcopy" },
+  { input = "复制命令输出到剪贴板", filled = "pwd | pbcopy" },
+]
+platforms = ["macos"]
+risk = "safe"
+args = [
+  { name = "text", required = true, description = "要复制的文本" },
+]
+
+[[command]]
+name = "pbpaste"
+binary = "pbpaste"
+template = "pbpaste"
+description = "粘贴剪贴板内容"
+keywords = ["粘贴", "剪贴板", "pbpaste", "paste"]
+examples = [
+  { input = "查看剪贴板内容", filled = "pbpaste" },
+  { input = "粘贴到文件", filled = "pbpaste > file.txt" },
+]
+platforms = ["macos"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "mac-ifconfig"
+binary = "ifconfig"
+template = "ifconfig"
+description = "查看网络接口和 IP 地址 (macOS)"
+keywords = ["IP", "地址", "网卡", "ifconfig", "网络", "接口"]
+examples = [
+  { input = "查看本机IP", filled = "ifconfig | grep 'inet '" },
+]
+platforms = ["macos"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "mac-launchctl"
+binary = "launchctl"
+template = "launchctl list {flags}"
+description = "查看/管理 macOS 后台服务 (launchd)"
+keywords = ["服务", "launchctl", "launchd", "后台", "daemon"]
+examples = [
+  { input = "查看所有服务", filled = "launchctl list" },
+  { input = "查看指定服务", filled = "launchctl list | grep com.apple" },
+]
+platforms = ["macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "过滤条件" },
+]
+
+[[command]]
+name = "mac-netstat"
+binary = "netstat"
+template = "netstat -an | grep LISTEN"
+description = "查看所有监听端口 (macOS)"
+keywords = ["端口", "监听", "netstat", "listen", "开放端口"]
+examples = [
+  { input = "查看所有监听端口", filled = "netstat -an | grep LISTEN" },
+]
+platforms = ["macos"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "mac-softwareupdate"
+binary = "softwareupdate"
+template = "softwareupdate {flags}"
+description = "macOS 系统更新"
+keywords = ["系统更新", "macos", "update", "升级"]
+examples = [
+  { input = "检查系统更新", filled = "softwareupdate -l" },
+  { input = "安装所有更新", filled = "sudo softwareupdate -ia" },
+]
+platforms = ["macos"]
+risk = "moderate"
+args = [
+  { name = "flags", default = "-l", description = "-l 列出, -ia 安装所有" },
+]

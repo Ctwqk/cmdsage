@@ -1,0 +1,350 @@
+[[command]]
+name = "xargs-pipe"
+binary = "xargs"
+template = "{input_cmd} | xargs {flags} {command}"
+description = "从标准输入构建并执行命令，常与管道搭配使用"
+keywords = ["xargs", "管道", "批量", "pipe", "批量执行", "参数传递"]
+examples = [
+  { input = "查找并删除 .log 文件", filled = "find /var/log -name '*.log' -mtime +30 | xargs rm -f" },
+  { input = "并行压缩多个文件", filled = "find . -name '*.txt' | xargs -P4 -I{} gzip {}" },
+  { input = "批量重命名文件", filled = "ls *.jpg | xargs -I{} mv {} backup_{}" },
+  { input = "将文件内容作为参数执行", filled = "cat urls.txt | xargs -I{} curl -sO {}" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "input_cmd", required = true, description = "产生输入的命令" },
+  { name = "flags", default = "", description = "-I{} 替换符, -P 并行数, -n 每次参数个数, -0 null分隔" },
+  { name = "command", required = true, description = "要执行的命令" },
+]
+
+[[command]]
+name = "tee-output"
+binary = "tee"
+template = "{command} | tee {flags} {file}"
+description = "将输出同时发送到屏幕和文件"
+keywords = ["tee", "输出", "同时", "写文件", "管道", "分流", "既显示又保存"]
+examples = [
+  { input = "执行命令并保存输出到文件", filled = "ls -la | tee output.txt" },
+  { input = "追加写入而不覆盖", filled = "echo 'new line' | tee -a log.txt" },
+  { input = "同时写入多个文件", filled = "echo 'data' | tee file1.txt file2.txt" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "command", required = true, description = "产生输出的命令" },
+  { name = "flags", default = "", description = "-a 追加模式" },
+  { name = "file", required = true, description = "输出文件路径" },
+]
+
+[[command]]
+name = "tr-translate"
+binary = "tr"
+template = "echo '{text}' | tr {flags} '{set1}' '{set2}'"
+description = "转换或删除字符"
+keywords = ["tr", "替换字符", "删除字符", "大小写", "translate", "转换"]
+examples = [
+  { input = "小写转大写", filled = "echo 'hello world' | tr 'a-z' 'A-Z'" },
+  { input = "大写转小写", filled = "echo 'HELLO' | tr 'A-Z' 'a-z'" },
+  { input = "删除所有数字", filled = "echo 'abc123def' | tr -d '0-9'" },
+  { input = "把空格替换成换行", filled = "echo 'a b c d' | tr ' ' '\\n'" },
+  { input = "压缩连续空格为单个", filled = "echo 'a   b   c' | tr -s ' '" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-d 删除, -s 压缩重复, -c 补集" },
+  { name = "set1", required = true, description = "源字符集" },
+  { name = "set2", default = "", description = "目标字符集 (删除模式不需要)" },
+]
+
+[[command]]
+name = "cut-columns"
+binary = "cut"
+template = "cut -d'{delimiter}' -f{fields} {file}"
+description = "按分隔符提取文本中的指定列"
+keywords = ["cut", "列", "提取", "分割", "字段", "column", "CSV"]
+examples = [
+  { input = "提取 CSV 第1和第3列", filled = "cut -d',' -f1,3 data.csv" },
+  { input = "提取冒号分隔的第一列 (用户名)", filled = "cut -d':' -f1 /etc/passwd" },
+  { input = "提取每行前10个字符", filled = "cut -c1-10 file.txt" },
+  { input = "提取 Tab 分隔的第二列", filled = "cut -f2 data.tsv" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "delimiter", default = "\\t", description = "分隔符" },
+  { name = "fields", required = true, description = "字段号 (如 1,3 或 1-5)" },
+  { name = "file", required = true, description = "输入文件" },
+]
+
+[[command]]
+name = "paste-merge"
+binary = "paste"
+template = "paste {flags} {files}"
+description = "按行合并多个文件的内容"
+keywords = ["paste", "合并", "列合并", "并排", "merge", "横向合并"]
+examples = [
+  { input = "横向合并两个文件", filled = "paste file1.txt file2.txt" },
+  { input = "用逗号作为分隔符合并", filled = "paste -d',' file1.txt file2.txt" },
+  { input = "将单列转为多列 (每行3个)", filled = "paste - - - < file.txt" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-d 分隔符, -s 串行模式" },
+  { name = "files", required = true, description = "要合并的文件" },
+]
+
+[[command]]
+name = "join-files"
+binary = "join"
+template = "join {flags} {file1} {file2}"
+description = "按共同字段连接两个已排序文件（类似 SQL JOIN）"
+keywords = ["join", "连接", "关联", "合并", "SQL", "字段匹配"]
+examples = [
+  { input = "按第一列连接两个文件", filled = "join file1.txt file2.txt" },
+  { input = "用逗号分隔的文件连接", filled = "join -t',' file1.csv file2.csv" },
+  { input = "按第二列连接", filled = "join -1 2 -2 1 file1.txt file2.txt" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-t 分隔符, -1/-2 指定连接字段, -a 显示不匹配行" },
+  { name = "file1", required = true, description = "第一个文件 (需已排序)" },
+  { name = "file2", required = true, description = "第二个文件 (需已排序)" },
+]
+
+[[command]]
+name = "comm-compare"
+binary = "comm"
+template = "comm {flags} {file1} {file2}"
+description = "比较两个已排序文件，显示共有和独有的行"
+keywords = ["comm", "比较", "共有", "独有", "交集", "差集", "compare"]
+examples = [
+  { input = "找出两个文件的共有行", filled = "comm -12 <(sort file1.txt) <(sort file2.txt)" },
+  { input = "找出只在第一个文件中的行", filled = "comm -23 <(sort file1.txt) <(sort file2.txt)" },
+  { input = "找出只在第二个文件中的行", filled = "comm -13 <(sort file1.txt) <(sort file2.txt)" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-1 不显示仅file1, -2 不显示仅file2, -3 不显示共有" },
+  { name = "file1", required = true, description = "第一个文件 (需已排序)" },
+  { name = "file2", required = true, description = "第二个文件 (需已排序)" },
+]
+
+[[command]]
+name = "jq-json"
+binary = "jq"
+template = "jq '{filter}' {file}"
+description = "命令行 JSON 解析和格式化工具"
+keywords = ["jq", "json", "解析", "格式化", "JSON处理", "提取", "过滤"]
+examples = [
+  { input = "格式化 JSON", filled = "cat data.json | jq '.'" },
+  { input = "提取 JSON 字段", filled = "cat data.json | jq '.name'" },
+  { input = "提取数组元素", filled = "cat data.json | jq '.items[0]'" },
+  { input = "过滤 JSON 数组", filled = "cat data.json | jq '.[] | select(.age > 18)'" },
+  { input = "提取所有 name 字段", filled = "cat data.json | jq '.[].name'" },
+  { input = "API 响应提取字段", filled = "curl -s https://api.example.com/data | jq '.results[] | {id, name}'" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "filter", required = true, description = "jq 过滤表达式 (如 .name, .items[], select())" },
+  { name = "file", default = "", description = "JSON 文件 (也可通过管道输入)" },
+]
+
+[[command]]
+name = "yq-yaml"
+binary = "yq"
+template = "yq '{filter}' {file}"
+description = "命令行 YAML 解析和处理工具 (类似 jq)"
+keywords = ["yq", "yaml", "yml", "解析", "YAML处理", "配置文件", "kubernetes"]
+examples = [
+  { input = "读取 YAML 字段", filled = "yq '.metadata.name' deployment.yaml" },
+  { input = "修改 YAML 字段", filled = "yq -i '.spec.replicas = 3' deployment.yaml" },
+  { input = "YAML 转 JSON", filled = "yq -o json config.yaml" },
+  { input = "合并多个 YAML 文件", filled = "yq eval-all '. as $item ireduce ({}; . * $item)' file1.yaml file2.yaml" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "filter", required = true, description = "yq 过滤表达式" },
+  { name = "file", required = true, description = "YAML 文件路径" },
+]
+
+[[command]]
+name = "base64-encode"
+binary = "base64"
+template = "echo -n '{text}' | base64"
+description = "将文本或文件进行 Base64 编码"
+keywords = ["base64", "编码", "encode", "加密", "转码"]
+examples = [
+  { input = "Base64 编码文本", filled = "echo -n 'hello world' | base64" },
+  { input = "Base64 编码文件", filled = "base64 file.txt" },
+  { input = "Base64 编码用于 HTTP 认证", filled = "echo -n 'user:password' | base64" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "text", required = true, description = "要编码的文本" },
+]
+
+[[command]]
+name = "base64-decode"
+binary = "base64"
+template = "echo '{encoded}' | base64 -d"
+description = "解码 Base64 编码的文本"
+keywords = ["base64", "解码", "decode", "解密"]
+examples = [
+  { input = "Base64 解码", filled = "echo 'aGVsbG8gd29ybGQ=' | base64 -d" },
+  { input = "解码文件内容", filled = "base64 -d encoded.txt > decoded.bin" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "encoded", required = true, description = "Base64 编码的字符串" },
+]
+
+[[command]]
+name = "md5sum-hash"
+binary = "md5sum"
+template = "md5sum {file}"
+description = "计算文件的 MD5 校验值"
+keywords = ["md5", "md5sum", "校验", "hash", "哈希", "checksum", "验证"]
+examples = [
+  { input = "计算文件 MD5", filled = "md5sum file.iso" },
+  { input = "计算字符串的 MD5", filled = "echo -n 'hello' | md5sum" },
+  { input = "批量校验文件", filled = "md5sum *.tar.gz > checksums.md5 && md5sum -c checksums.md5" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "file", required = true, description = "要计算校验值的文件" },
+]
+
+[[command]]
+name = "sha256sum-hash"
+binary = "sha256sum"
+template = "sha256sum {file}"
+description = "计算文件的 SHA-256 校验值"
+keywords = ["sha256", "sha256sum", "校验", "hash", "哈希", "安全", "签名"]
+examples = [
+  { input = "计算文件 SHA256", filled = "sha256sum file.iso" },
+  { input = "校验下载文件的完整性", filled = "sha256sum -c SHA256SUMS" },
+  { input = "计算字符串的 SHA256", filled = "echo -n 'hello' | sha256sum" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "file", required = true, description = "要计算校验值的文件" },
+]
+
+[[command]]
+name = "hexdump-view"
+binary = "hexdump"
+template = "hexdump {flags} {file}"
+description = "以十六进制格式查看文件二进制内容"
+keywords = ["hexdump", "十六进制", "hex", "二进制", "binary", "字节"]
+examples = [
+  { input = "十六进制查看文件", filled = "hexdump -C file.bin" },
+  { input = "查看文件前64字节", filled = "hexdump -C -n 64 file.bin" },
+  { input = "查看文件的魔数/文件头", filled = "hexdump -C -n 16 file" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-C", description = "-C 规范格式, -n 字节数限制, -s 跳过偏移" },
+  { name = "file", required = true, description = "要查看的文件" },
+]
+
+[[command]]
+name = "strings-extract"
+binary = "strings"
+template = "strings {flags} {file}"
+description = "从二进制文件中提取可打印字符串"
+keywords = ["strings", "二进制", "提取", "字符串", "binary", "可执行文件"]
+examples = [
+  { input = "提取二进制文件中的字符串", filled = "strings /usr/bin/ls" },
+  { input = "提取最少8字符的字符串", filled = "strings -n 8 binary_file" },
+  { input = "在二进制中搜索特定字符串", filled = "strings binary_file | grep 'password'" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-n 最小长度, -a 扫描整个文件" },
+  { name = "file", required = true, description = "二进制文件路径" },
+]
+
+[[command]]
+name = "iconv-convert"
+binary = "iconv"
+template = "iconv -f {from} -t {to} {file}"
+description = "转换文件的字符编码"
+keywords = ["iconv", "编码", "转换", "encoding", "UTF-8", "GBK", "GB2312", "乱码", "字符集"]
+examples = [
+  { input = "GBK 转 UTF-8", filled = "iconv -f GBK -t UTF-8 chinese.txt > output.txt" },
+  { input = "UTF-8 转 GBK", filled = "iconv -f UTF-8 -t GBK input.txt > output.txt" },
+  { input = "查看支持的编码列表", filled = "iconv -l" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "from", required = true, description = "源编码 (如 GBK, GB2312, UTF-8, ISO-8859-1)" },
+  { name = "to", required = true, description = "目标编码" },
+  { name = "file", required = true, description = "输入文件" },
+]
+
+[[command]]
+name = "od-octal-dump"
+binary = "od"
+template = "od {flags} {file}"
+description = "以八进制/十六进制/十进制查看文件内容"
+keywords = ["od", "八进制", "dump", "二进制查看", "octal"]
+examples = [
+  { input = "八进制查看文件", filled = "od -c file.bin" },
+  { input = "十六进制查看文件", filled = "od -A x -t x1z file.bin" },
+  { input = "查看文件前32字节", filled = "od -N 32 -c file.bin" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-c", description = "-c 字符, -x 十六进制, -A 地址格式, -N 字节数" },
+  { name = "file", required = true, description = "要查看的文件" },
+]
+
+[[command]]
+name = "column-format"
+binary = "column"
+template = "column {flags} {file}"
+description = "将文本格式化为整齐的表格列"
+keywords = ["column", "表格", "对齐", "格式化", "列", "table"]
+examples = [
+  { input = "格式化为表格", filled = "column -t data.txt" },
+  { input = "用逗号分隔的数据格式化", filled = "column -t -s',' data.csv" },
+  { input = "mount 输出格式化", filled = "mount | column -t" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-t", description = "-t 表格模式, -s 分隔符" },
+  { name = "file", default = "", description = "输入文件 (也可通过管道)" },
+]
+
+[[command]]
+name = "envsubst-template"
+binary = "envsubst"
+template = "envsubst < {template} > {output}"
+description = "将文件中的环境变量占位符替换为实际值"
+keywords = ["envsubst", "模板", "环境变量", "替换", "template", "变量替换"]
+examples = [
+  { input = "替换模板中的环境变量", filled = "envsubst < config.template > config.conf" },
+  { input = "只替换指定变量", filled = "envsubst '$USER $HOME' < template.txt > output.txt" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "template", required = true, description = "模板文件路径" },
+  { name = "output", required = true, description = "输出文件路径" },
+]

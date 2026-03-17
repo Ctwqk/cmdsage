@@ -1,0 +1,152 @@
+[[command]]
+name = "grep-search"
+binary = "grep"
+template = "grep -rn '{pattern}' {path}"
+description = "在文件内容中搜索匹配的文本"
+keywords = ["搜索", "查找", "内容", "grep", "文本", "匹配", "search", "关键字"]
+examples = [
+  { input = "搜索包含 TODO 的文件", filled = "grep -rn 'TODO' ." },
+  { input = "在 py 文件中搜索 import", filled = "grep -rn 'import' --include='*.py' ." },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "pattern", required = true, description = "搜索模式 (支持正则)" },
+  { name = "path", default = ".", description = "搜索目录" },
+]
+
+[[command]]
+name = "sed-replace"
+binary = "sed"
+template = "sed -i 's/{old}/{new}/g' {file}"
+description = "在文件中批量替换文本"
+keywords = ["替换", "sed", "replace", "修改", "批量替换", "文本替换"]
+examples = [
+  { input = "把文件里的 foo 替换成 bar", filled = "sed -i 's/foo/bar/g' file.txt" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "old", required = true, description = "要替换的文本" },
+  { name = "new", required = true, description = "替换后的文本" },
+  { name = "file", required = true, description = "目标文件" },
+]
+
+[[command]]
+name = "word-count"
+binary = "wc"
+template = "wc {flags} {file}"
+description = "统计文件的行数、字数、字节数"
+keywords = ["统计", "行数", "字数", "wc", "count", "行", "多少行"]
+examples = [
+  { input = "统计文件行数", filled = "wc -l file.txt" },
+  { input = "统计当前目录所有文件的行数", filled = "find . -type f | xargs wc -l" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-l", description = "-l 行数, -w 字数, -c 字节数" },
+  { name = "file", required = true, description = "文件路径" },
+]
+
+[[command]]
+name = "sort-file"
+binary = "sort"
+template = "sort {flags} {file}"
+description = "对文件内容排序"
+keywords = ["排序", "sort", "排列", "顺序"]
+examples = [
+  { input = "对文件排序", filled = "sort file.txt" },
+  { input = "按数字排序", filled = "sort -n file.txt" },
+  { input = "去重排序", filled = "sort -u file.txt" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-n 数字排序, -r 逆序, -u 去重, -k 按列" },
+  { name = "file", required = true, description = "文件路径" },
+]
+
+[[command]]
+name = "unique-lines"
+binary = "uniq"
+template = "sort {file} | uniq {flags}"
+description = "去除重复行 (需先排序)"
+keywords = ["去重", "唯一", "uniq", "重复", "duplicate"]
+examples = [
+  { input = "去除重复行", filled = "sort file.txt | uniq" },
+  { input = "统计重复次数", filled = "sort file.txt | uniq -c" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-c 计数, -d 只显示重复行" },
+  { name = "file", required = true, description = "文件路径" },
+]
+
+[[command]]
+name = "head-file"
+binary = "head"
+template = "head -n {count} {file}"
+description = "查看文件前几行"
+keywords = ["前几行", "开头", "head", "前面", "头部"]
+examples = [
+  { input = "查看文件前20行", filled = "head -n 20 file.txt" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "count", default = "10", description = "显示行数" },
+  { name = "file", required = true, description = "文件路径" },
+]
+
+[[command]]
+name = "tail-file"
+binary = "tail"
+template = "tail {flags} {file}"
+description = "查看文件末尾内容或实时跟踪"
+keywords = ["末尾", "最后", "tail", "跟踪", "实时", "日志", "log"]
+examples = [
+  { input = "查看文件最后20行", filled = "tail -n 20 file.txt" },
+  { input = "实时跟踪日志", filled = "tail -f /var/log/syslog" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-n 10", description = "-n 行数, -f 实时跟踪" },
+  { name = "file", required = true, description = "文件路径" },
+]
+
+[[command]]
+name = "awk-column"
+binary = "awk"
+template = "awk '{print ${column}}' {file}"
+description = "提取文件中的指定列"
+keywords = ["列", "awk", "提取", "column", "字段", "分割"]
+examples = [
+  { input = "提取第二列", filled = "awk '{print $2}' file.txt" },
+  { input = "用逗号分割提取第一列", filled = "awk -F',' '{print $1}' file.csv" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "column", default = "1", description = "列号" },
+  { name = "file", required = true, description = "文件路径" },
+]
+
+[[command]]
+name = "diff-files"
+binary = "diff"
+template = "diff {flags} {file1} {file2}"
+description = "比较两个文件的差异"
+keywords = ["比较", "差异", "diff", "对比", "不同"]
+examples = [
+  { input = "比较两个文件", filled = "diff -u file1.txt file2.txt" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-u", description = "-u unified格式, --color 彩色输出" },
+  { name = "file1", required = true, description = "第一个文件" },
+  { name = "file2", required = true, description = "第二个文件" },
+]

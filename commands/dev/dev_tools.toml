@@ -1,0 +1,376 @@
+[[command]]
+name = "tmux-new-session"
+binary = "tmux"
+template = "tmux new-session -s {name}"
+description = "创建新的 tmux 会话"
+keywords = ["tmux", "会话", "session", "终端复用", "后台", "新建会话"]
+examples = [
+  { input = "创建名为 dev 的 tmux 会话", filled = "tmux new-session -s dev" },
+  { input = "创建会话并执行命令", filled = "tmux new-session -s monitor 'htop'" },
+  { input = "后台创建会话", filled = "tmux new-session -d -s background" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "name", required = true, description = "会话名称" },
+]
+
+[[command]]
+name = "tmux-attach"
+binary = "tmux"
+template = "tmux attach-session -t {name}"
+description = "重新连接到已存在的 tmux 会话"
+keywords = ["tmux", "连接", "attach", "恢复", "重连", "会话恢复"]
+examples = [
+  { input = "恢复到 dev 会话", filled = "tmux attach-session -t dev" },
+  { input = "连接到最近的会话", filled = "tmux attach" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "name", required = true, description = "会话名称" },
+]
+
+[[command]]
+name = "tmux-list"
+binary = "tmux"
+template = "tmux list-sessions"
+description = "列出所有 tmux 会话"
+keywords = ["tmux", "列出", "list", "会话列表", "查看会话"]
+examples = [
+  { input = "查看所有 tmux 会话", filled = "tmux list-sessions" },
+  { input = "查看所有窗口", filled = "tmux list-windows" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "tmux-split"
+binary = "tmux"
+template = "tmux split-window {flags}"
+description = "在 tmux 中分割窗格"
+keywords = ["tmux", "分割", "split", "窗格", "pane", "分屏"]
+examples = [
+  { input = "水平分割窗格", filled = "tmux split-window -h" },
+  { input = "垂直分割窗格", filled = "tmux split-window -v" },
+  { input = "分割并执行命令", filled = "tmux split-window -h 'tail -f /var/log/syslog'" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-v", description = "-h 水平分割, -v 垂直分割, -p 百分比大小" },
+]
+
+[[command]]
+name = "screen-session"
+binary = "screen"
+template = "screen {flags} {name}"
+description = "创建或恢复 screen 终端会话"
+keywords = ["screen", "会话", "终端复用", "后台", "恢复"]
+examples = [
+  { input = "创建 screen 会话", filled = "screen -S mywork" },
+  { input = "恢复 screen 会话", filled = "screen -r mywork" },
+  { input = "列出所有 screen 会话", filled = "screen -ls" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-S", description = "-S 新建, -r 恢复, -ls 列出, -d 分离" },
+  { name = "name", default = "", description = "会话名称" },
+]
+
+[[command]]
+name = "watch-repeat"
+binary = "watch"
+template = "watch -n {interval} '{command}'"
+description = "定时重复执行命令并刷新显示结果"
+keywords = ["watch", "监控", "定时", "刷新", "实时", "重复执行", "监视"]
+examples = [
+  { input = "每2秒刷新查看进程", filled = "watch -n 2 'ps aux | head -20'" },
+  { input = "监控磁盘使用", filled = "watch -n 5 'df -h'" },
+  { input = "高亮变化部分", filled = "watch -d -n 1 'ls -la /tmp'" },
+  { input = "监控容器状态", filled = "watch -n 3 'docker ps'" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "interval", default = "2", description = "刷新间隔 (秒)" },
+  { name = "command", required = true, description = "要重复执行的命令" },
+]
+
+[[command]]
+name = "export-env"
+binary = "export"
+template = "export {name}={value}"
+description = "设置环境变量"
+keywords = ["export", "环境变量", "env", "变量", "设置", "environment"]
+examples = [
+  { input = "设置环境变量", filled = "export MY_VAR=hello" },
+  { input = "设置 PATH", filled = "export PATH=$PATH:/usr/local/bin" },
+  { input = "查看所有环境变量", filled = "env" },
+  { input = "查看特定环境变量", filled = "echo $HOME" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "name", required = true, description = "变量名" },
+  { name = "value", required = true, description = "变量值" },
+]
+
+[[command]]
+name = "alias-shortcut"
+binary = "alias"
+template = "alias {name}='{command}'"
+description = "创建命令别名（快捷方式）"
+keywords = ["alias", "别名", "快捷", "shortcut", "缩写"]
+examples = [
+  { input = "创建 ll 别名", filled = "alias ll='ls -alh'" },
+  { input = "创建 git 快捷命令", filled = "alias gs='git status'" },
+  { input = "查看所有别名", filled = "alias" },
+  { input = "持久化别名到 bashrc", filled = "echo \"alias ll='ls -alh'\" >> ~/.bashrc && source ~/.bashrc" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "name", required = true, description = "别名" },
+  { name = "command", required = true, description = "实际命令" },
+]
+
+[[command]]
+name = "crontab-schedule"
+binary = "crontab"
+template = "crontab {flags}"
+description = "管理定时任务 (cron job)"
+keywords = ["cron", "crontab", "定时", "计划任务", "schedule", "自动执行", "定时任务"]
+examples = [
+  { input = "查看当前定时任务", filled = "crontab -l" },
+  { input = "编辑定时任务", filled = "crontab -e" },
+  { input = "每天凌晨3点执行备份", filled = "(crontab -l 2>/dev/null; echo '0 3 * * * /home/user/backup.sh') | crontab -" },
+  { input = "每5分钟执行一次", filled = "(crontab -l 2>/dev/null; echo '*/5 * * * * /path/to/script.sh') | crontab -" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "flags", default = "-l", description = "-l 列出, -e 编辑, -r 删除所有" },
+]
+
+[[command]]
+name = "systemctl-service"
+binary = "systemctl"
+template = "sudo systemctl {action} {service}"
+description = "管理 systemd 服务和系统单元"
+keywords = ["systemctl", "systemd", "服务", "service", "启动", "停止", "重启", "开机启动"]
+examples = [
+  { input = "查看服务状态", filled = "sudo systemctl status nginx" },
+  { input = "启动服务", filled = "sudo systemctl start nginx" },
+  { input = "重启服务", filled = "sudo systemctl restart nginx" },
+  { input = "设置开机启动", filled = "sudo systemctl enable nginx" },
+  { input = "查看所有运行中的服务", filled = "systemctl list-units --type=service --state=running" },
+  { input = "查看服务日志", filled = "journalctl -u nginx -f" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = [
+  { name = "action", required = true, description = "start/stop/restart/status/enable/disable" },
+  { name = "service", required = true, description = "服务名称" },
+]
+
+[[command]]
+name = "systemd-timer"
+binary = "systemctl"
+template = "systemctl {flags} list-timers"
+description = "查看和管理 systemd 定时器"
+keywords = ["systemd", "timer", "定时器", "计划", "schedule", "定时任务"]
+examples = [
+  { input = "查看所有定时器", filled = "systemctl list-timers --all" },
+  { input = "查看定时器状态", filled = "systemctl status my-backup.timer" },
+  { input = "启用定时器", filled = "sudo systemctl enable --now my-backup.timer" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "--all", description = "--all 显示所有" },
+]
+
+[[command]]
+name = "strace-syscall"
+binary = "strace"
+template = "strace {flags} {command}"
+description = "追踪进程的系统调用和信号"
+keywords = ["strace", "系统调用", "syscall", "调试", "trace", "debug", "追踪"]
+examples = [
+  { input = "追踪命令的系统调用", filled = "strace ls -la" },
+  { input = "追踪网络相关的系统调用", filled = "strace -e network curl https://example.com" },
+  { input = "追踪文件相关操作", filled = "strace -e trace=file ls" },
+  { input = "追踪运行中的进程", filled = "sudo strace -p 12345" },
+  { input = "统计系统调用耗时", filled = "strace -c ls -la" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-p 进程ID, -e 过滤, -c 统计, -f 跟踪子进程, -o 输出文件" },
+  { name = "command", default = "", description = "要追踪的命令" },
+]
+
+[[command]]
+name = "ltrace-libcall"
+binary = "ltrace"
+template = "ltrace {flags} {command}"
+description = "追踪进程的库函数调用"
+keywords = ["ltrace", "库调用", "library", "调试", "函数调用", "debug"]
+examples = [
+  { input = "追踪库函数调用", filled = "ltrace ls" },
+  { input = "追踪运行中的进程", filled = "sudo ltrace -p 12345" },
+  { input = "统计库调用", filled = "ltrace -c ls" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-p 进程ID, -c 统计, -e 过滤" },
+  { name = "command", default = "", description = "要追踪的命令" },
+]
+
+[[command]]
+name = "ldd-libs"
+binary = "ldd"
+template = "ldd {binary}"
+description = "查看可执行文件依赖的共享库"
+keywords = ["ldd", "依赖", "共享库", "动态链接", "library", "so", "缺少库"]
+examples = [
+  { input = "查看程序依赖的库", filled = "ldd /usr/bin/ls" },
+  { input = "查看 Python 依赖的库", filled = "ldd $(which python3)" },
+  { input = "检查缺少的库", filled = "ldd /usr/local/bin/myapp | grep 'not found'" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "binary", required = true, description = "可执行文件路径" },
+]
+
+[[command]]
+name = "nm-symbols"
+binary = "nm"
+template = "nm {flags} {binary}"
+description = "查看目标文件或库的符号表"
+keywords = ["nm", "符号", "symbol", "函数", "链接", "目标文件"]
+examples = [
+  { input = "查看库的符号表", filled = "nm -D /usr/lib/libc.so.6" },
+  { input = "查看未定义的符号", filled = "nm -u mylib.so" },
+  { input = "查看目标文件导出的函数", filled = "nm -g mylib.o" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-D 动态符号, -u 未定义, -g 外部符号, -C 还原C++名称" },
+  { name = "binary", required = true, description = "二进制文件/库路径" },
+]
+
+[[command]]
+name = "objdump-disasm"
+binary = "objdump"
+template = "objdump {flags} {binary}"
+description = "反汇编和查看目标文件信息"
+keywords = ["objdump", "反汇编", "disassemble", "汇编", "二进制分析", "section"]
+examples = [
+  { input = "反汇编可执行文件", filled = "objdump -d /usr/bin/ls" },
+  { input = "查看所有段信息", filled = "objdump -h myprogram" },
+  { input = "反汇编并显示源码", filled = "objdump -d -S myprogram" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-d", description = "-d 反汇编, -h 段头, -S 混合源码, -t 符号表" },
+  { name = "binary", required = true, description = "二进制文件路径" },
+]
+
+[[command]]
+name = "valgrind-memcheck"
+binary = "valgrind"
+template = "valgrind {flags} {command}"
+description = "检测程序的内存泄漏和内存错误"
+keywords = ["valgrind", "内存泄漏", "memory leak", "内存检查", "debug", "调试"]
+examples = [
+  { input = "检测内存泄漏", filled = "valgrind --leak-check=full ./myprogram" },
+  { input = "详细内存错误报告", filled = "valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./myprogram" },
+  { input = "检查未初始化变量", filled = "valgrind --track-origins=yes ./myprogram" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "--leak-check=full", description = "--leak-check=full 详细泄漏检查, --track-origins=yes 追踪来源" },
+  { name = "command", required = true, description = "要检测的程序及参数" },
+]
+
+[[command]]
+name = "gdb-debug"
+binary = "gdb"
+template = "gdb {flags} {program}"
+description = "GNU 调试器，用于调试 C/C++ 程序"
+keywords = ["gdb", "调试", "debug", "断点", "崩溃", "core dump", "segfault"]
+examples = [
+  { input = "调试程序", filled = "gdb ./myprogram" },
+  { input = "分析 core dump", filled = "gdb ./myprogram core" },
+  { input = "附加到运行中的进程", filled = "sudo gdb -p 12345" },
+  { input = "运行并在崩溃时停止", filled = "gdb -ex run -ex bt ./myprogram" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-p 进程ID, -ex 执行命令, --args 传递参数" },
+  { name = "program", required = true, description = "可执行程序路径" },
+]
+
+[[command]]
+name = "perf-profile"
+binary = "perf"
+template = "sudo perf {action} {flags} {command}"
+description = "Linux 性能分析工具"
+keywords = ["perf", "性能", "profile", "CPU", "分析", "热点", "benchmark", "火焰图"]
+examples = [
+  { input = "分析程序CPU热点", filled = "sudo perf record -g ./myprogram" },
+  { input = "查看分析报告", filled = "sudo perf report" },
+  { input = "统计程序性能计数", filled = "sudo perf stat ./myprogram" },
+  { input = "实时查看系统热点", filled = "sudo perf top" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "action", required = true, description = "record/report/stat/top" },
+  { name = "flags", default = "", description = "-g 调用图, -p 进程ID, -e 事件" },
+  { name = "command", default = "", description = "要分析的程序" },
+]
+
+[[command]]
+name = "htop-monitor"
+binary = "htop"
+template = "htop {flags}"
+description = "交互式进程查看器，增强版 top"
+keywords = ["htop", "进程", "CPU", "内存", "监控", "top", "资源", "进程管理"]
+examples = [
+  { input = "查看系统进程", filled = "htop" },
+  { input = "只查看某用户的进程", filled = "htop -u www-data" },
+  { input = "按树形结构显示进程", filled = "htop -t" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-u 用户过滤, -t 树形, -p 指定PID" },
+]
+
+[[command]]
+name = "iotop-diskio"
+binary = "iotop"
+template = "sudo iotop {flags}"
+description = "监控磁盘 I/O 使用情况"
+keywords = ["iotop", "磁盘IO", "IO", "读写", "disk", "性能", "I/O监控"]
+examples = [
+  { input = "查看磁盘IO使用", filled = "sudo iotop" },
+  { input = "只显示有IO的进程", filled = "sudo iotop -o" },
+  { input = "批处理模式输出", filled = "sudo iotop -b -n 5" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-o", description = "-o 只显示活跃进程, -b 批处理, -n 迭代次数" },
+]

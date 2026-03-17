@@ -1,0 +1,175 @@
+[[command]]
+name = "git-status"
+binary = "git"
+template = "git status"
+description = "查看 Git 工作区状态"
+keywords = ["git", "状态", "status", "改动", "修改", "变更"]
+examples = [
+  { input = "查看 git 状态", filled = "git status" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "git-log"
+binary = "git"
+template = "git log {flags}"
+description = "查看 Git 提交历史"
+keywords = ["git", "日志", "log", "历史", "提交记录", "commit"]
+examples = [
+  { input = "查看提交历史", filled = "git log --oneline -20" },
+  { input = "查看图形化日志", filled = "git log --oneline --graph --all" },
+  { input = "查看某文件的提交历史", filled = "git log --oneline -- file.txt" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "--oneline -20", description = "--oneline 单行, --graph 图形, -n 数量" },
+]
+
+[[command]]
+name = "git-diff"
+binary = "git"
+template = "git diff {flags}"
+description = "查看 Git 文件差异"
+keywords = ["git", "差异", "diff", "改了什么", "变动"]
+examples = [
+  { input = "查看修改内容", filled = "git diff" },
+  { input = "查看暂存区差异", filled = "git diff --staged" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "--staged 暂存区, --stat 统计" },
+]
+
+[[command]]
+name = "git-add-commit"
+binary = "git"
+template = "git add {files} && git commit -m '{message}'"
+description = "暂存并提交文件"
+keywords = ["git", "提交", "commit", "add", "暂存", "保存"]
+examples = [
+  { input = "提交所有修改", filled = "git add -A && git commit -m 'update'" },
+  { input = "提交指定文件", filled = "git add file.txt && git commit -m 'update file'" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "moderate"
+args = [
+  { name = "files", default = "-A", description = "要暂存的文件 (-A 全部)" },
+  { name = "message", required = true, description = "提交信息" },
+]
+
+[[command]]
+name = "git-branch"
+binary = "git"
+template = "git branch {flags}"
+description = "查看或管理 Git 分支"
+keywords = ["git", "分支", "branch", "branches"]
+examples = [
+  { input = "查看所有分支", filled = "git branch -a" },
+  { input = "创建新分支", filled = "git branch new-feature" },
+  { input = "删除分支", filled = "git branch -d old-branch" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-a", description = "-a 全部, -d 删除, -m 重命名" },
+]
+
+[[command]]
+name = "git-checkout"
+binary = "git"
+template = "git checkout {target}"
+description = "切换 Git 分支或恢复文件"
+keywords = ["git", "切换", "checkout", "switch", "分支切换"]
+examples = [
+  { input = "切换到 main 分支", filled = "git checkout main" },
+  { input = "创建并切换新分支", filled = "git checkout -b new-feature" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "moderate"
+args = [
+  { name = "target", required = true, description = "分支名或 -b 新分支名" },
+]
+
+[[command]]
+name = "git-pull"
+binary = "git"
+template = "git pull {flags}"
+description = "从远程拉取最新代码"
+keywords = ["git", "拉取", "pull", "更新", "同步"]
+examples = [
+  { input = "拉取最新代码", filled = "git pull" },
+  { input = "rebase 方式拉取", filled = "git pull --rebase" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "--rebase rebase方式" },
+]
+
+[[command]]
+name = "git-push"
+binary = "git"
+template = "git push {flags}"
+description = "推送代码到远程仓库"
+keywords = ["git", "推送", "push", "上传", "提交到远程"]
+examples = [
+  { input = "推送代码", filled = "git push" },
+  { input = "推送新分支", filled = "git push -u origin new-feature" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "moderate"
+args = [
+  { name = "flags", default = "", description = "-u 设置上游, --force 强制推送" },
+]
+
+[[command]]
+name = "git-stash"
+binary = "git"
+template = "git stash {action}"
+description = "暂存当前修改 (不提交)"
+keywords = ["git", "暂存", "stash", "保存", "临时", "藏"]
+examples = [
+  { input = "暂存当前修改", filled = "git stash" },
+  { input = "恢复暂存的修改", filled = "git stash pop" },
+  { input = "查看暂存列表", filled = "git stash list" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "action", default = "", description = "pop 恢复, list 列表, drop 删除" },
+]
+
+[[command]]
+name = "git-reset-soft"
+binary = "git"
+template = "git reset --soft HEAD~{count}"
+description = "撤销最近的 commit (保留修改)"
+keywords = ["git", "撤销", "reset", "回退", "undo", "取消提交"]
+examples = [
+  { input = "撤销上一次 commit", filled = "git reset --soft HEAD~1" },
+  { input = "撤销最近3次 commit", filled = "git reset --soft HEAD~3" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "moderate"
+args = [
+  { name = "count", default = "1", description = "撤销的 commit 数量" },
+]
+
+[[command]]
+name = "git-clone"
+binary = "git"
+template = "git clone {url}"
+description = "克隆远程仓库"
+keywords = ["git", "克隆", "clone", "下载", "仓库"]
+examples = [
+  { input = "克隆仓库", filled = "git clone https://github.com/user/repo.git" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "url", required = true, description = "仓库地址" },
+]

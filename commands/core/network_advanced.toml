@@ -1,0 +1,357 @@
+[[command]]
+name = "wget-download"
+binary = "wget"
+template = "wget {flags} '{url}'"
+description = "从网络下载文件，支持断点续传和递归下载"
+keywords = ["wget", "下载", "download", "断点续传", "递归下载", "网页", "mirror"]
+examples = [
+  { input = "下载文件", filled = "wget https://example.com/file.tar.gz" },
+  { input = "断点续传下载", filled = "wget -c https://example.com/largefile.iso" },
+  { input = "后台下载", filled = "wget -b https://example.com/largefile.iso" },
+  { input = "递归下载整个网站", filled = "wget -r -np -k https://example.com/" },
+  { input = "下载并重命名文件", filled = "wget -O output.zip https://example.com/file.zip" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-c 断点续传, -O 输出文件名, -r 递归, -b 后台, -np 不跟踪父目录, -k 转换链接" },
+  { name = "url", required = true, description = "下载地址" },
+]
+
+[[command]]
+name = "rsync-sync"
+binary = "rsync"
+template = "rsync {flags} {source} {dest}"
+description = "高效同步文件或目录，支持增量传输和远程同步"
+keywords = ["rsync", "同步", "sync", "备份", "增量", "传输", "镜像", "backup"]
+examples = [
+  { input = "同步本地目录", filled = "rsync -av /src/ /dst/" },
+  { input = "同步到远程服务器", filled = "rsync -avz /local/dir/ user@host:/remote/dir/" },
+  { input = "从远程服务器同步回来", filled = "rsync -avz user@host:/remote/dir/ /local/dir/" },
+  { input = "同步并删除目标端多余文件", filled = "rsync -av --delete /src/ /dst/" },
+  { input = "排除某些文件同步", filled = "rsync -av --exclude='*.log' /src/ /dst/" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "flags", default = "-av", description = "-a 归档模式, -v 详细, -z 压缩, --delete 删除多余, --exclude 排除" },
+  { name = "source", required = true, description = "源路径" },
+  { name = "dest", required = true, description = "目标路径" },
+]
+
+[[command]]
+name = "nc-netcat"
+binary = "nc"
+template = "nc {flags} {host} {port}"
+description = "网络瑞士军刀，用于端口扫描、监听、传输数据"
+keywords = ["nc", "netcat", "端口", "监听", "扫描", "连接测试", "网络调试"]
+examples = [
+  { input = "测试端口是否开放", filled = "nc -zv 192.168.1.1 80" },
+  { input = "扫描端口范围", filled = "nc -zv 192.168.1.1 20-100" },
+  { input = "监听本地端口", filled = "nc -l 8080" },
+  { input = "通过 netcat 传输文件 (接收端)", filled = "nc -l 9999 > received_file.txt" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "flags", default = "-zv", description = "-z 扫描模式, -v 详细, -l 监听, -u UDP" },
+  { name = "host", required = true, description = "目标主机" },
+  { name = "port", required = true, description = "端口号或范围 (如 80 或 20-100)" },
+]
+
+[[command]]
+name = "dig-dns"
+binary = "dig"
+template = "dig {flags} {domain} {type}"
+description = "DNS 查询工具，查询域名解析记录"
+keywords = ["dig", "dns", "域名", "解析", "DNS查询", "记录", "A记录", "MX", "nameserver"]
+examples = [
+  { input = "查询域名 A 记录", filled = "dig example.com A" },
+  { input = "查询 MX 邮件记录", filled = "dig example.com MX" },
+  { input = "查询所有 DNS 记录", filled = "dig example.com ANY" },
+  { input = "指定 DNS 服务器查询", filled = "dig @8.8.8.8 example.com" },
+  { input = "简短输出查询结果", filled = "dig +short example.com" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "@server 指定DNS服务器, +short 简短输出, +trace 跟踪" },
+  { name = "domain", required = true, description = "查询的域名" },
+  { name = "type", default = "A", description = "记录类型: A, AAAA, MX, NS, TXT, CNAME, ANY" },
+]
+
+[[command]]
+name = "nslookup-dns"
+binary = "nslookup"
+template = "nslookup {domain} {server}"
+description = "查询域名对应的 IP 地址"
+keywords = ["nslookup", "dns", "域名解析", "IP查询", "name server"]
+examples = [
+  { input = "查询域名IP", filled = "nslookup example.com" },
+  { input = "用指定DNS查询", filled = "nslookup example.com 8.8.8.8" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "domain", required = true, description = "要查询的域名" },
+  { name = "server", default = "", description = "指定 DNS 服务器" },
+]
+
+[[command]]
+name = "traceroute-path"
+binary = "traceroute"
+template = "traceroute {flags} {host}"
+description = "追踪网络数据包到目标主机的路径"
+keywords = ["traceroute", "路由", "路径", "追踪", "跳数", "trace", "网络路径", "tracert"]
+examples = [
+  { input = "追踪到目标的路由路径", filled = "traceroute 8.8.8.8" },
+  { input = "使用 ICMP 追踪路由", filled = "traceroute -I google.com" },
+  { input = "限制最大跳数", filled = "traceroute -m 15 example.com" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-I ICMP模式, -m 最大跳数, -n 不解析主机名" },
+  { name = "host", required = true, description = "目标主机" },
+]
+
+[[command]]
+name = "iptables-rules"
+binary = "iptables"
+template = "sudo iptables {flags}"
+description = "管理 Linux 防火墙规则 (iptables)"
+keywords = ["iptables", "防火墙", "firewall", "规则", "封禁", "放行", "端口", "安全"]
+examples = [
+  { input = "查看防火墙规则", filled = "sudo iptables -L -n -v" },
+  { input = "开放80端口", filled = "sudo iptables -A INPUT -p tcp --dport 80 -j ACCEPT" },
+  { input = "封禁某个IP", filled = "sudo iptables -A INPUT -s 10.0.0.5 -j DROP" },
+  { input = "删除所有规则", filled = "sudo iptables -F" },
+  { input = "禁止某IP访问特定端口", filled = "sudo iptables -A INPUT -s 10.0.0.5 -p tcp --dport 22 -j DROP" },
+]
+platforms = ["linux"]
+risk = "dangerous"
+args = [
+  { name = "flags", required = true, description = "-L 列出, -A 添加, -D 删除, -F 清空, -p 协议, --dport 目标端口, -j 动作" },
+]
+
+[[command]]
+name = "tcpdump-capture"
+binary = "tcpdump"
+template = "sudo tcpdump {flags}"
+description = "抓取和分析网络数据包"
+keywords = ["tcpdump", "抓包", "capture", "网络分析", "数据包", "packet", "流量"]
+examples = [
+  { input = "抓取所有网络包", filled = "sudo tcpdump -i eth0" },
+  { input = "抓取指定端口的包", filled = "sudo tcpdump -i any port 80" },
+  { input = "抓取特定IP的包", filled = "sudo tcpdump -i any host 192.168.1.100" },
+  { input = "抓包保存到文件", filled = "sudo tcpdump -i eth0 -w capture.pcap" },
+  { input = "抓取 DNS 流量", filled = "sudo tcpdump -i any port 53" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "flags", default = "-i any", description = "-i 网卡, -w 写入文件, -c 抓包数量, port/host 过滤条件" },
+]
+
+[[command]]
+name = "nmap-scan"
+binary = "nmap"
+template = "nmap {flags} {target}"
+description = "网络扫描和安全审计工具"
+keywords = ["nmap", "扫描", "端口扫描", "scan", "安全", "主机发现", "服务探测"]
+examples = [
+  { input = "扫描主机开放端口", filled = "nmap 192.168.1.1" },
+  { input = "扫描整个子网", filled = "nmap 192.168.1.0/24" },
+  { input = "扫描指定端口范围", filled = "nmap -p 1-1000 192.168.1.1" },
+  { input = "探测服务版本", filled = "nmap -sV 192.168.1.1" },
+  { input = "快速扫描常见端口", filled = "nmap -F 192.168.1.1" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "flags", default = "", description = "-sV 版本探测, -F 快速, -p 端口范围, -O 系统检测, -A 全面扫描" },
+  { name = "target", required = true, description = "目标IP或网段" },
+]
+
+[[command]]
+name = "curl-post-json"
+binary = "curl"
+template = "curl -X POST -H 'Content-Type: application/json' {flags} -d '{data}' '{url}'"
+description = "发送 JSON POST 请求到 API"
+keywords = ["curl", "post", "json", "api", "请求", "接口调用", "REST"]
+examples = [
+  { input = "发送 JSON POST 请求", filled = "curl -X POST -H 'Content-Type: application/json' -d '{\"name\":\"test\",\"value\":123}' 'https://api.example.com/data'" },
+  { input = "发送 POST 并查看响应头", filled = "curl -X POST -H 'Content-Type: application/json' -i -d '{\"key\":\"val\"}' 'https://api.example.com/data'" },
+  { input = "带 Token 认证发送 POST", filled = "curl -X POST -H 'Content-Type: application/json' -H 'Authorization: Bearer TOKEN' -d '{\"key\":\"val\"}' 'https://api.example.com/data'" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-s", description = "-s 静默, -i 显示响应头, -H 自定义头部, -v 详细" },
+  { name = "data", required = true, description = "JSON 请求体" },
+  { name = "url", required = true, description = "请求URL" },
+]
+
+[[command]]
+name = "curl-headers"
+binary = "curl"
+template = "curl -I {flags} '{url}'"
+description = "只获取 HTTP 响应头信息"
+keywords = ["curl", "header", "响应头", "HTTP头", "状态码", "HEAD"]
+examples = [
+  { input = "查看响应头", filled = "curl -I https://example.com" },
+  { input = "跟随重定向查看最终响应头", filled = "curl -ILs https://example.com" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-s", description = "-s 静默, -L 跟随重定向" },
+  { name = "url", required = true, description = "请求URL" },
+]
+
+[[command]]
+name = "ssh-tunnel-local"
+binary = "ssh"
+template = "ssh -L {local_port}:{remote_host}:{remote_port} {user}@{gateway}"
+description = "创建 SSH 本地端口转发隧道"
+keywords = ["ssh", "隧道", "tunnel", "端口转发", "port forward", "本地转发"]
+examples = [
+  { input = "SSH 本地端口转发访问远程数据库", filled = "ssh -L 3306:localhost:3306 user@remote-server" },
+  { input = "通过跳板机访问内网服务", filled = "ssh -L 8080:internal-host:80 user@jump-server" },
+  { input = "后台运行SSH隧道", filled = "ssh -fNL 5432:localhost:5432 user@remote-server" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "local_port", required = true, description = "本地监听端口" },
+  { name = "remote_host", default = "localhost", description = "远程目标主机" },
+  { name = "remote_port", required = true, description = "远程目标端口" },
+  { name = "user", required = true, description = "SSH 用户名" },
+  { name = "gateway", required = true, description = "SSH 网关/跳板机" },
+]
+
+[[command]]
+name = "ssh-tunnel-remote"
+binary = "ssh"
+template = "ssh -R {remote_port}:{local_host}:{local_port} {user}@{server}"
+description = "创建 SSH 远程端口转发（反向隧道），将本地服务暴露到远程"
+keywords = ["ssh", "反向隧道", "reverse tunnel", "远程转发", "内网穿透", "暴露服务"]
+examples = [
+  { input = "将本地8080端口暴露到远程服务器", filled = "ssh -R 9090:localhost:8080 user@remote-server" },
+  { input = "后台运行反向隧道", filled = "ssh -fNR 9090:localhost:8080 user@remote-server" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "remote_port", required = true, description = "远程监听端口" },
+  { name = "local_host", default = "localhost", description = "本地主机" },
+  { name = "local_port", required = true, description = "本地端口" },
+  { name = "user", required = true, description = "SSH 用户名" },
+  { name = "server", required = true, description = "远程服务器" },
+]
+
+[[command]]
+name = "ssh-socks-proxy"
+binary = "ssh"
+template = "ssh -D {port} {user}@{server}"
+description = "通过 SSH 创建 SOCKS5 代理"
+keywords = ["ssh", "代理", "socks", "proxy", "翻墙", "动态转发"]
+examples = [
+  { input = "创建 SOCKS5 代理", filled = "ssh -D 1080 user@remote-server" },
+  { input = "后台运行 SOCKS5 代理", filled = "ssh -fND 1080 user@remote-server" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "port", default = "1080", description = "本地 SOCKS 代理端口" },
+  { name = "user", required = true, description = "SSH 用户名" },
+  { name = "server", required = true, description = "远程服务器" },
+]
+
+[[command]]
+name = "hosts-edit"
+binary = "sh"
+template = "echo '{ip} {domain}' | sudo tee -a /etc/hosts"
+description = "添加自定义域名解析到 hosts 文件"
+keywords = ["hosts", "域名", "解析", "DNS", "本地DNS", "/etc/hosts"]
+examples = [
+  { input = "添加 hosts 映射", filled = "echo '127.0.0.1 myapp.local' | sudo tee -a /etc/hosts" },
+  { input = "查看当前 hosts 文件", filled = "cat /etc/hosts" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "ip", required = true, description = "IP 地址" },
+  { name = "domain", required = true, description = "域名" },
+]
+
+[[command]]
+name = "ufw-firewall"
+binary = "ufw"
+template = "sudo ufw {action}"
+description = "简单的 Ubuntu 防火墙管理工具"
+keywords = ["ufw", "防火墙", "firewall", "端口", "安全", "放行", "ubuntu"]
+examples = [
+  { input = "查看防火墙状态", filled = "sudo ufw status verbose" },
+  { input = "开放80端口", filled = "sudo ufw allow 80/tcp" },
+  { input = "开放SSH端口", filled = "sudo ufw allow 22/tcp" },
+  { input = "封禁某IP", filled = "sudo ufw deny from 10.0.0.5" },
+  { input = "启用防火墙", filled = "sudo ufw enable" },
+]
+platforms = ["linux"]
+risk = "dangerous"
+args = [
+  { name = "action", required = true, description = "status/allow/deny/enable/disable/delete" },
+]
+
+[[command]]
+name = "ss-connections"
+binary = "ss"
+template = "ss {flags}"
+description = "查看网络连接状态和 socket 统计信息"
+keywords = ["ss", "连接", "socket", "TCP", "网络状态", "连接数", "established"]
+examples = [
+  { input = "查看所有 TCP 连接", filled = "ss -tn" },
+  { input = "查看连接到80端口的客户端", filled = "ss -tn dport = :80" },
+  { input = "统计各状态连接数", filled = "ss -s" },
+  { input = "查看某进程的网络连接", filled = "ss -tnp | grep nginx" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-tn", description = "-t TCP, -u UDP, -l 监听, -n 数字显示, -p 进程, -s 统计" },
+]
+
+[[command]]
+name = "curl-download-progress"
+binary = "curl"
+template = "curl -L -o {output} '{url}'"
+description = "使用 curl 下载文件并显示进度条"
+keywords = ["curl", "下载", "download", "进度", "保存文件"]
+examples = [
+  { input = "下载文件到指定路径", filled = "curl -L -o /tmp/file.tar.gz 'https://example.com/file.tar.gz'" },
+  { input = "断点续传下载", filled = "curl -L -C - -o file.iso 'https://example.com/file.iso'" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "output", required = true, description = "输出文件路径" },
+  { name = "url", required = true, description = "下载地址" },
+]
+
+[[command]]
+name = "mtr-traceroute"
+binary = "mtr"
+template = "mtr {flags} {host}"
+description = "结合 ping 和 traceroute 的实时网络诊断工具"
+keywords = ["mtr", "网络诊断", "路由", "丢包", "延迟", "ping", "traceroute"]
+examples = [
+  { input = "实时网络诊断", filled = "mtr 8.8.8.8" },
+  { input = "生成报告模式", filled = "mtr -r -c 10 google.com" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-r 报告模式, -c 次数, -n 不解析主机名" },
+  { name = "host", required = true, description = "目标主机" },
+]

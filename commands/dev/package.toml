@@ -1,0 +1,128 @@
+[[command]]
+name = "npm-install"
+binary = "npm"
+template = "npm install {package}"
+description = "安装 Node.js 包"
+keywords = ["npm", "install", "安装", "node", "包", "依赖"]
+examples = [
+  { input = "安装所有依赖", filled = "npm install" },
+  { input = "安装 express", filled = "npm install express" },
+  { input = "全局安装", filled = "npm install -g typescript" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "package", default = "", description = "包名 (空则安装所有依赖)" },
+]
+
+[[command]]
+name = "npm-run"
+binary = "npm"
+template = "npm run {script}"
+description = "运行 package.json 中定义的脚本"
+keywords = ["npm", "run", "脚本", "运行", "dev", "build", "test"]
+examples = [
+  { input = "运行开发服务器", filled = "npm run dev" },
+  { input = "运行构建", filled = "npm run build" },
+  { input = "运行测试", filled = "npm run test" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "script", required = true, description = "脚本名称" },
+]
+
+[[command]]
+name = "pip-install"
+binary = "pip"
+template = "pip install {package}"
+description = "安装 Python 包"
+keywords = ["pip", "python", "安装", "install", "包"]
+examples = [
+  { input = "安装 requests", filled = "pip install requests" },
+  { input = "安装 requirements", filled = "pip install -r requirements.txt" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "package", required = true, description = "包名或 -r requirements.txt" },
+]
+
+[[command]]
+name = "cargo-build"
+binary = "cargo"
+template = "cargo build {flags}"
+description = "构建 Rust 项目"
+keywords = ["cargo", "build", "构建", "编译", "rust"]
+examples = [
+  { input = "构建项目", filled = "cargo build" },
+  { input = "发布构建", filled = "cargo build --release" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "--release 发布模式" },
+]
+
+[[command]]
+name = "cargo-run"
+binary = "cargo"
+template = "cargo run {flags}"
+description = "运行 Rust 项目"
+keywords = ["cargo", "run", "运行", "rust", "执行"]
+examples = [
+  { input = "运行项目", filled = "cargo run" },
+  { input = "运行 release 版本", filled = "cargo run --release" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "--release 发布模式" },
+]
+
+[[command]]
+name = "cargo-test"
+binary = "cargo"
+template = "cargo test {flags}"
+description = "运行 Rust 测试"
+keywords = ["cargo", "test", "测试", "rust"]
+examples = [
+  { input = "运行所有测试", filled = "cargo test" },
+  { input = "运行指定测试", filled = "cargo test test_name" },
+]
+platforms = ["linux", "macos", "windows"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "测试名过滤" },
+]
+
+[[command]]
+name = "apt-install"
+binary = "apt"
+template = "sudo apt install -y {package}"
+description = "安装系统软件包 (Debian/Ubuntu)"
+keywords = ["apt", "install", "安装", "软件", "包管理", "ubuntu", "debian"]
+examples = [
+  { input = "安装 vim", filled = "sudo apt install -y vim" },
+  { input = "安装 build-essential", filled = "sudo apt install -y build-essential" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = [
+  { name = "package", required = true, description = "软件包名称" },
+]
+
+[[command]]
+name = "apt-search"
+binary = "apt"
+template = "apt search {query}"
+description = "搜索可用的软件包"
+keywords = ["apt", "search", "搜索", "查找", "软件"]
+examples = [
+  { input = "搜索 python 相关包", filled = "apt search python" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "query", required = true, description = "搜索关键字" },
+]

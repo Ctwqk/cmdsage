@@ -1,0 +1,202 @@
+[[command]]
+name = "list-files"
+binary = "ls"
+template = "ls {flags} {path}"
+description = "列出目录中的文件和文件夹"
+keywords = ["列出", "查看", "文件", "目录", "ls", "list", "目录内容", "文件列表"]
+examples = [
+  { input = "列出当前目录的文件", filled = "ls -la" },
+  { input = "查看 /tmp 下的文件", filled = "ls -la /tmp" },
+  { input = "按时间排序列出文件", filled = "ls -lt" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-la", description = "-l 详细, -a 显示隐藏, -h 人类可读大小, -t 按时间排序" },
+  { name = "path", default = ".", description = "目标目录路径" },
+]
+
+[[command]]
+name = "find-files-by-name"
+binary = "find"
+template = "find {path} -name '{pattern}'"
+description = "按文件名模式搜索文件"
+keywords = ["查找", "搜索", "文件", "find", "名字", "文件名", "搜文件"]
+examples = [
+  { input = "找到所有 py 文件", filled = "find . -name '*.py'" },
+  { input = "在 /tmp 下找 log 文件", filled = "find /tmp -name '*.log'" },
+  { input = "查找所有 json 文件", filled = "find . -name '*.json'" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "path", default = ".", description = "搜索起始目录" },
+  { name = "pattern", required = true, description = "文件名模式 (支持通配符)" },
+]
+
+[[command]]
+name = "find-files-by-size"
+binary = "find"
+template = "find {path} -size +{size} -type f"
+description = "查找超过指定大小的文件"
+keywords = ["查找", "大文件", "文件大小", "size", "超过", "find", "big"]
+examples = [
+  { input = "找到所有超过100M的文件", filled = "find . -size +100M -type f" },
+  { input = "查找大于1G的文件", filled = "find . -size +1G -type f" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "path", default = ".", description = "搜索起始目录" },
+  { name = "size", required = true, description = "文件大小 (如 100M, 1G)" },
+]
+
+[[command]]
+name = "find-recent-files"
+binary = "find"
+template = "find {path} -mtime -{days} -type f"
+description = "查找最近修改过的文件"
+keywords = ["最近", "修改", "新文件", "recent", "modified", "天", "today"]
+examples = [
+  { input = "找最近7天修改的文件", filled = "find . -mtime -7 -type f" },
+  { input = "查找今天修改过的文件", filled = "find . -mtime -1 -type f" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "path", default = ".", description = "搜索起始目录" },
+  { name = "days", required = true, description = "天数" },
+]
+
+[[command]]
+name = "copy-files"
+binary = "cp"
+template = "cp {flags} {source} {dest}"
+description = "复制文件或目录"
+keywords = ["复制", "拷贝", "cp", "copy", "备份"]
+examples = [
+  { input = "复制文件到 /tmp", filled = "cp file.txt /tmp/" },
+  { input = "递归复制目录", filled = "cp -r src/ dst/" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-r 递归复制目录, -v 显示进度" },
+  { name = "source", required = true, description = "源文件/目录" },
+  { name = "dest", required = true, description = "目标路径" },
+]
+
+[[command]]
+name = "move-files"
+binary = "mv"
+template = "mv {source} {dest}"
+description = "移动或重命名文件"
+keywords = ["移动", "重命名", "mv", "move", "rename"]
+examples = [
+  { input = "重命名文件", filled = "mv old.txt new.txt" },
+  { input = "移动文件到 /tmp", filled = "mv file.txt /tmp/" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "source", required = true, description = "源文件路径" },
+  { name = "dest", required = true, description = "目标路径" },
+]
+
+[[command]]
+name = "remove-files"
+binary = "rm"
+template = "rm {flags} {path}"
+description = "删除文件或目录"
+keywords = ["删除", "移除", "rm", "remove", "删掉"]
+examples = [
+  { input = "删除文件", filled = "rm file.txt" },
+  { input = "递归删除目录", filled = "rm -rf dir/" },
+]
+platforms = ["linux", "macos"]
+risk = "dangerous"
+args = [
+  { name = "flags", default = "", description = "-r 递归, -f 强制, -i 交互确认" },
+  { name = "path", required = true, description = "要删除的文件/目录路径" },
+]
+
+[[command]]
+name = "change-permissions"
+binary = "chmod"
+template = "chmod {mode} {path}"
+description = "修改文件权限"
+keywords = ["权限", "chmod", "permission", "可执行", "读写"]
+examples = [
+  { input = "给脚本添加执行权限", filled = "chmod +x script.sh" },
+  { input = "设置文件权限为644", filled = "chmod 644 file.txt" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "mode", required = true, description = "权限模式 (如 755, +x, u+rw)" },
+  { name = "path", required = true, description = "文件路径" },
+]
+
+[[command]]
+name = "create-directory"
+binary = "mkdir"
+template = "mkdir -p {path}"
+description = "创建目录 (含中间目录)"
+keywords = ["创建", "新建", "目录", "文件夹", "mkdir", "directory", "folder"]
+examples = [
+  { input = "创建目录 src/utils", filled = "mkdir -p src/utils" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "path", required = true, description = "目录路径" },
+]
+
+[[command]]
+name = "disk-usage-file"
+binary = "du"
+template = "du -sh {path}"
+description = "查看文件或目录的磁盘占用大小"
+keywords = ["大小", "占用", "du", "disk", "usage", "空间", "容量"]
+examples = [
+  { input = "查看当前目录大小", filled = "du -sh ." },
+  { input = "查看各子目录大小", filled = "du -sh *" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "path", default = ".", description = "目标路径" },
+]
+
+[[command]]
+name = "tree-view"
+binary = "tree"
+template = "tree {flags} {path}"
+description = "以树形结构显示目录"
+keywords = ["树", "目录结构", "tree", "结构", "层级"]
+examples = [
+  { input = "显示目录树", filled = "tree -L 2" },
+  { input = "只显示目录", filled = "tree -d" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-L 3", description = "-L 深度, -d 仅目录, -I 排除模式" },
+  { name = "path", default = ".", description = "目标目录" },
+]
+
+[[command]]
+name = "symlink"
+binary = "ln"
+template = "ln -s {target} {link}"
+description = "创建符号链接 (软链接)"
+keywords = ["链接", "软链接", "symlink", "ln", "快捷方式"]
+examples = [
+  { input = "创建软链接", filled = "ln -s /path/to/target /path/to/link" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "target", required = true, description = "链接目标路径" },
+  { name = "link", required = true, description = "链接名称" },
+]

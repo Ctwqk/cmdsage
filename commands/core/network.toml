@@ -1,0 +1,97 @@
+[[command]]
+name = "curl-get"
+binary = "curl"
+template = "curl {flags} '{url}'"
+description = "发送 HTTP 请求 (GET/POST)"
+keywords = ["curl", "http", "请求", "api", "下载", "wget", "get", "post", "接口"]
+examples = [
+  { input = "发送 GET 请求", filled = "curl -s https://api.example.com/data" },
+  { input = "下载文件", filled = "curl -O https://example.com/file.zip" },
+  { input = "发送 POST 请求", filled = "curl -X POST -H 'Content-Type: application/json' -d '{\"key\":\"value\"}' https://api.example.com/data" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-s", description = "-s 静默, -O 下载, -X 方法, -H 头部, -d 数据" },
+  { name = "url", required = true, description = "请求URL" },
+]
+
+[[command]]
+name = "ping-host"
+binary = "ping"
+template = "ping -c {count} {host}"
+description = "测试网络连通性"
+keywords = ["ping", "网络", "连通", "延迟", "通不通", "网络测试"]
+examples = [
+  { input = "ping 百度", filled = "ping -c 4 baidu.com" },
+  { input = "测试网络连通性", filled = "ping -c 4 8.8.8.8" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "count", default = "4", description = "ping 次数" },
+  { name = "host", required = true, description = "目标主机" },
+]
+
+[[command]]
+name = "show-ports"
+binary = "ss"
+template = "ss -tlnp"
+description = "查看所有监听端口"
+keywords = ["端口", "监听", "ss", "netstat", "listen", "开放端口", "服务"]
+examples = [
+  { input = "查看所有监听端口", filled = "ss -tlnp" },
+  { input = "查看 TCP 连接状态", filled = "ss -tn" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "show-ip"
+binary = "ip"
+template = "ip addr show"
+description = "查看本机 IP 地址和网络接口"
+keywords = ["IP", "地址", "网卡", "ip", "网络", "ifconfig", "接口"]
+examples = [
+  { input = "查看本机IP", filled = "ip addr show" },
+  { input = "查看网络接口", filled = "ip link show" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "ssh-connect"
+binary = "ssh"
+template = "ssh {user}@{host}"
+description = "通过 SSH 连接远程服务器"
+keywords = ["ssh", "远程", "连接", "登录", "服务器"]
+examples = [
+  { input = "SSH 连接服务器", filled = "ssh user@192.168.1.100" },
+  { input = "SSH 指定端口", filled = "ssh -p 2222 user@host" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "user", required = true, description = "用户名" },
+  { name = "host", required = true, description = "主机地址" },
+]
+
+[[command]]
+name = "scp-transfer"
+binary = "scp"
+template = "scp {flags} {source} {dest}"
+description = "通过 SSH 在本地和远程之间传输文件"
+keywords = ["传输", "scp", "上传", "下载", "远程", "复制"]
+examples = [
+  { input = "上传文件到服务器", filled = "scp file.txt user@host:/remote/path/" },
+  { input = "从服务器下载文件", filled = "scp user@host:/remote/file.txt ./" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-r 递归, -P 端口" },
+  { name = "source", required = true, description = "源路径" },
+  { name = "dest", required = true, description = "目标路径" },
+]

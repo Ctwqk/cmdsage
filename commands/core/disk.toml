@@ -1,0 +1,107 @@
+[[command]]
+name = "list-block-devices"
+binary = "lsblk"
+template = "lsblk {flags}"
+description = "列出所有块设备 (硬盘/分区/U盘)"
+keywords = ["硬盘", "分区", "lsblk", "磁盘", "设备", "U盘", "挂载"]
+examples = [
+  { input = "查看所有磁盘", filled = "lsblk" },
+  { input = "查看磁盘详细信息", filled = "lsblk -f" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-f 显示文件系统, -o 自定义列" },
+]
+
+[[command]]
+name = "mount-device"
+binary = "mount"
+template = "sudo mount {device} {mountpoint}"
+description = "挂载磁盘/分区/U盘到指定目录"
+keywords = ["挂载", "mount", "磁盘", "分区", "U盘"]
+examples = [
+  { input = "挂载U盘", filled = "sudo mount /dev/sdb1 /mnt/usb" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = [
+  { name = "device", required = true, description = "设备路径 (如 /dev/sdb1)" },
+  { name = "mountpoint", required = true, description = "挂载点目录" },
+]
+
+[[command]]
+name = "umount-device"
+binary = "umount"
+template = "sudo umount {mountpoint}"
+description = "卸载已挂载的磁盘/分区"
+keywords = ["卸载", "umount", "unmount", "弹出"]
+examples = [
+  { input = "卸载U盘", filled = "sudo umount /mnt/usb" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = [
+  { name = "mountpoint", required = true, description = "挂载点或设备路径" },
+]
+
+[[command]]
+name = "ncdu-disk"
+binary = "ncdu"
+template = "ncdu {path}"
+description = "交互式磁盘使用分析 (ncdu)"
+keywords = ["磁盘", "分析", "ncdu", "占用", "空间", "大文件", "清理"]
+examples = [
+  { input = "分析磁盘占用", filled = "ncdu /" },
+  { input = "分析当前目录空间", filled = "ncdu ." },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "path", default = ".", description = "分析目录路径" },
+]
+
+[[command]]
+name = "top-disk-usage"
+binary = "du"
+template = "du -ah {path} | sort -rh | head -n {count}"
+description = "列出最大的文件和目录"
+keywords = ["最大", "大文件", "排序", "空间", "占用最多"]
+examples = [
+  { input = "找出最大的20个文件", filled = "du -ah . | sort -rh | head -n 20" },
+  { input = "查看占用空间最多的目录", filled = "du -ah / | sort -rh | head -n 20" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "path", default = ".", description = "目标路径" },
+  { name = "count", default = "20", description = "显示数量" },
+]
+
+[[command]]
+name = "swap-info"
+binary = "swapon"
+template = "swapon --show"
+description = "查看交换分区 (swap) 使用情况"
+keywords = ["swap", "交换", "虚拟内存"]
+examples = [
+  { input = "查看 swap 使用情况", filled = "swapon --show" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "iostat"
+binary = "iostat"
+template = "iostat {flags}"
+description = "查看磁盘 I/O 统计信息"
+keywords = ["IO", "磁盘", "读写", "性能", "iostat", "IOPS"]
+examples = [
+  { input = "查看磁盘IO统计", filled = "iostat -x 1" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "-x 1", description = "-x 扩展信息, 1 每秒刷新" },
+]

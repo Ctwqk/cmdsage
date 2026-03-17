@@ -1,0 +1,237 @@
+[[command]]
+name = "systemctl-status"
+binary = "systemctl"
+template = "systemctl status {service}"
+description = "查看系统服务状态"
+keywords = ["服务", "systemctl", "状态", "service", "systemd", "运行状态"]
+examples = [
+  { input = "查看 nginx 状态", filled = "systemctl status nginx" },
+  { input = "查看 docker 服务状态", filled = "systemctl status docker" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "service", required = true, description = "服务名称" },
+]
+
+[[command]]
+name = "systemctl-start"
+binary = "systemctl"
+template = "sudo systemctl start {service}"
+description = "启动系统服务"
+keywords = ["启动", "服务", "systemctl", "start"]
+examples = [
+  { input = "启动 nginx", filled = "sudo systemctl start nginx" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = [
+  { name = "service", required = true, description = "服务名称" },
+]
+
+[[command]]
+name = "systemctl-stop"
+binary = "systemctl"
+template = "sudo systemctl stop {service}"
+description = "停止系统服务"
+keywords = ["停止", "服务", "systemctl", "stop", "关闭"]
+examples = [
+  { input = "停止 nginx", filled = "sudo systemctl stop nginx" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = [
+  { name = "service", required = true, description = "服务名称" },
+]
+
+[[command]]
+name = "systemctl-restart"
+binary = "systemctl"
+template = "sudo systemctl restart {service}"
+description = "重启系统服务"
+keywords = ["重启", "服务", "systemctl", "restart"]
+examples = [
+  { input = "重启 nginx", filled = "sudo systemctl restart nginx" },
+  { input = "重启 docker", filled = "sudo systemctl restart docker" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = [
+  { name = "service", required = true, description = "服务名称" },
+]
+
+[[command]]
+name = "systemctl-enable"
+binary = "systemctl"
+template = "sudo systemctl enable {service}"
+description = "设置服务开机自启"
+keywords = ["开机", "自启", "enable", "systemctl", "自动启动"]
+examples = [
+  { input = "设置 nginx 开机自启", filled = "sudo systemctl enable nginx" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = [
+  { name = "service", required = true, description = "服务名称" },
+]
+
+[[command]]
+name = "systemctl-list"
+binary = "systemctl"
+template = "systemctl list-units --type=service {flags}"
+description = "列出所有系统服务"
+keywords = ["所有服务", "列出", "服务列表", "systemctl", "units"]
+examples = [
+  { input = "查看所有运行中的服务", filled = "systemctl list-units --type=service --state=running" },
+  { input = "查看所有服务", filled = "systemctl list-units --type=service" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "--state=running 只显示运行中" },
+]
+
+[[command]]
+name = "journalctl-logs"
+binary = "journalctl"
+template = "journalctl {flags} -u {service}"
+description = "查看系统日志 (systemd journal)"
+keywords = ["日志", "journalctl", "journal", "系统日志", "syslog"]
+examples = [
+  { input = "查看 nginx 日志", filled = "journalctl -u nginx --no-pager -n 100" },
+  { input = "实时跟踪服务日志", filled = "journalctl -u nginx -f" },
+  { input = "查看今天的系统日志", filled = "journalctl --since today" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "--no-pager -n 100", description = "-f 实时, -n 行数, --since 时间" },
+  { name = "service", required = true, description = "服务名称" },
+]
+
+[[command]]
+name = "apt-update"
+binary = "apt"
+template = "sudo apt update && sudo apt upgrade -y"
+description = "更新系统软件包列表并升级"
+keywords = ["更新", "升级", "apt", "update", "upgrade", "系统更新"]
+examples = [
+  { input = "更新系统", filled = "sudo apt update && sudo apt upgrade -y" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = []
+
+[[command]]
+name = "apt-remove"
+binary = "apt"
+template = "sudo apt remove {package}"
+description = "卸载软件包"
+keywords = ["卸载", "删除", "apt", "remove", "软件"]
+examples = [
+  { input = "卸载 vim", filled = "sudo apt remove vim" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = [
+  { name = "package", required = true, description = "软件包名称" },
+]
+
+[[command]]
+name = "ip-route"
+binary = "ip"
+template = "ip route show"
+description = "查看路由表"
+keywords = ["路由", "route", "网关", "gateway", "ip"]
+examples = [
+  { input = "查看路由表", filled = "ip route show" },
+  { input = "查看默认网关", filled = "ip route show default" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "iptables-list"
+binary = "iptables"
+template = "sudo iptables -L -n -v"
+description = "查看防火墙规则 (iptables)"
+keywords = ["防火墙", "iptables", "firewall", "规则", "过滤"]
+examples = [
+  { input = "查看防火墙规则", filled = "sudo iptables -L -n -v" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "useradd"
+binary = "useradd"
+template = "sudo useradd -m -s /bin/bash {username}"
+description = "创建新用户"
+keywords = ["用户", "创建", "添加", "useradd", "新用户", "账户"]
+examples = [
+  { input = "创建新用户 john", filled = "sudo useradd -m -s /bin/bash john" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = [
+  { name = "username", required = true, description = "用户名" },
+]
+
+[[command]]
+name = "passwd"
+binary = "passwd"
+template = "sudo passwd {username}"
+description = "修改用户密码"
+keywords = ["密码", "passwd", "修改密码", "password"]
+examples = [
+  { input = "修改用户密码", filled = "sudo passwd john" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = [
+  { name = "username", required = true, description = "用户名" },
+]
+
+[[command]]
+name = "crontab-list"
+binary = "crontab"
+template = "crontab -l"
+description = "查看当前用户的定时任务"
+keywords = ["定时", "cron", "crontab", "计划任务", "定时任务"]
+examples = [
+  { input = "查看定时任务", filled = "crontab -l" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = []
+
+[[command]]
+name = "crontab-edit"
+binary = "crontab"
+template = "crontab -e"
+description = "编辑定时任务"
+keywords = ["编辑", "修改", "cron", "crontab", "定时任务", "添加"]
+examples = [
+  { input = "编辑定时任务", filled = "crontab -e" },
+]
+platforms = ["linux"]
+risk = "moderate"
+args = []
+
+[[command]]
+name = "dmesg-log"
+binary = "dmesg"
+template = "dmesg {flags}"
+description = "查看内核日志 (硬件、驱动等)"
+keywords = ["内核", "dmesg", "硬件", "驱动", "启动日志"]
+examples = [
+  { input = "查看内核日志", filled = "dmesg --follow" },
+  { input = "查看最近的内核消息", filled = "dmesg | tail -50" },
+]
+platforms = ["linux"]
+risk = "safe"
+args = [
+  { name = "flags", default = "| tail -50", description = "--follow 实时, | tail -N 最近N行" },
+]

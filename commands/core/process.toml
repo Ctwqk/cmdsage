@@ -1,0 +1,97 @@
+[[command]]
+name = "list-processes"
+binary = "ps"
+template = "ps aux {flags}"
+description = "查看系统进程列表"
+keywords = ["进程", "ps", "process", "运行中", "任务"]
+examples = [
+  { input = "查看所有进程", filled = "ps aux" },
+  { input = "查找 python 进程", filled = "ps aux | grep python" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "附加过滤" },
+]
+
+[[command]]
+name = "kill-process"
+binary = "kill"
+template = "kill {flags} {pid}"
+description = "终止指定进程"
+keywords = ["杀死", "终止", "kill", "停止", "进程", "结束"]
+examples = [
+  { input = "杀死进程 1234", filled = "kill 1234" },
+  { input = "强制杀死进程", filled = "kill -9 1234" },
+]
+platforms = ["linux", "macos"]
+risk = "moderate"
+args = [
+  { name = "flags", default = "", description = "-9 强制终止, -15 优雅终止" },
+  { name = "pid", required = true, description = "进程ID" },
+]
+
+[[command]]
+name = "kill-by-port"
+binary = "lsof"
+template = "lsof -i :{port}"
+description = "查找占用指定端口的进程"
+keywords = ["端口", "port", "占用", "lsof", "监听", "listen"]
+examples = [
+  { input = "查看8080端口被谁占用", filled = "lsof -i :8080" },
+  { input = "找到占用3000端口的进程", filled = "lsof -i :3000" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "port", required = true, description = "端口号" },
+]
+
+[[command]]
+name = "top-processes"
+binary = "top"
+template = "top {flags}"
+description = "实时查看系统资源占用和进程"
+keywords = ["资源", "CPU", "内存", "top", "占用", "监控", "性能"]
+examples = [
+  { input = "查看系统资源占用", filled = "top" },
+  { input = "按内存排序", filled = "top -o %MEM" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "flags", default = "", description = "-o 排序字段, -n 刷新次数" },
+]
+
+[[command]]
+name = "background-process"
+binary = "nohup"
+template = "nohup {command} &"
+description = "在后台运行命令，不受终端关闭影响"
+keywords = ["后台", "nohup", "background", "挂起", "常驻"]
+examples = [
+  { input = "后台运行 python 脚本", filled = "nohup python script.py &" },
+  { input = "后台运行并重定向输出", filled = "nohup ./server > output.log 2>&1 &" },
+]
+platforms = ["linux", "macos"]
+risk = "safe"
+args = [
+  { name = "command", required = true, description = "要在后台运行的命令" },
+]
+
+[[command]]
+name = "kill-by-name"
+binary = "pkill"
+template = "pkill {flags} {name}"
+description = "按进程名终止进程"
+keywords = ["杀死", "名字", "pkill", "killall", "进程名"]
+examples = [
+  { input = "杀死所有 python 进程", filled = "pkill python" },
+  { input = "杀死所有 node 进程", filled = "pkill node" },
+]
+platforms = ["linux", "macos"]
+risk = "dangerous"
+args = [
+  { name = "flags", default = "", description = "-9 强制, -f 全命令行匹配" },
+  { name = "name", required = true, description = "进程名称模式" },
+]
